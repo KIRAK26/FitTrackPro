@@ -1,0 +1,51 @@
+# Visual Studio / .NET Core template
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio / VS Code specific
+.vs/
+.vscode/
+*.vspscc
+*.vssscc
+.idea/
+
+## Environment specific files
+appsettings.Development.json
+
+# Entity Framework migrations cache
+Migrations/obj/
+
+# Publish output (optional but good to ignore)
+publish/
+dist/
+
+# Logs & temporary data
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Rider / JetBrains IDEs
+*.iml
+.idea/
+
+# macOS system
+*.DS_Store
+

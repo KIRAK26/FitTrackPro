@@ -1,0 +1,17 @@
+﻿@page
+@* The @page directive is required. It tells ASP.NET Core that this is a routable Razor Page. *@
+
+@model HelloWorldModel
+@* The @model directive specifies the PageModel class associated with this view, enabling strong-typed access to its properties. *@
+
+@{
+    // Set the title that appears in the browser tab.
+    ViewData["Title"] = "Hello World Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    @* Use @Model to access public properties of the backing C# class (HelloWorldModel). *@
+    <p>@Model.Message</p>
+</div>
