@@ -8,7 +8,7 @@ FitTrackPro is an ASP.NET Core Razor Pages app that consolidates workout managem
 - **OS**: Windows / macOS / Linux
 - **Editors**: Visual Studio (Windows) / VS Code (Win/Mac)
 
----
+
 
 ## ✅ Requirements
 - **.NET 8 SDK** installed  
@@ -16,7 +16,7 @@ FitTrackPro is an ASP.NET Core Razor Pages app that consolidates workout managem
 - A modern browser (Edge/Chrome/Firefox/Safari)
 - (Optional) VS Code with **C#** extension or Visual Studio 2022
 
----
+
 
 ## 📦 Getting Started
 
@@ -25,7 +25,7 @@ FitTrackPro is an ASP.NET Core Razor Pages app that consolidates workout managem
 git clone https://github.com/<your-username>/FitTrackPro.git
 cd FitTrackPro
 
-2) Restore & Run
+## 2️⃣ Restore & Run
 
 dotnet restore
 dotnet run --project ./FitTrackPro
@@ -38,7 +38,7 @@ HTTP: http://localhost:5000
 
     If HTTPS warns about certificate locally, it’s safe for development.
 
-🧭 Project Structure
+## 🧭 Project Structure
 
 FitTrackPro/
 ├─ FitTrackPro.sln                # Solution
@@ -53,7 +53,7 @@ FitTrackPro/
 ├─ global.json                    # locks .NET SDK version
 └─ README.md
 
-▶️ Run in Visual Studio (Windows)
+## ▶️ Run in Visual Studio (Windows)
 
     Open FitTrackPro.sln
 
@@ -61,7 +61,7 @@ FitTrackPro/
 
     Press F5 (Debug) or Ctrl+F5 (Run)
 
-▶️ Run in VS Code (Windows/macOS)
+## ▶️ Run in VS Code (Windows/macOS)
 
 dotnet restore
 dotnet run --project ./FitTrackPro
@@ -79,7 +79,7 @@ dotnet test
 
     Line endings: .gitattributes normalizes LF/CRLF across Windows & macOS.
 
-👥 Team Workflow (Simple)
+## 👥 Team Workflow (Simple)
 
     Main branches:
 
@@ -98,7 +98,7 @@ git checkout -b feat/your-feature
 git push -u origin feat/your-feature
 # open Pull Request to dev/main
 
-🧰 Common Commands
+## 🧰 Common Commands
 
 dotnet --info                 # environment info
 dotnet new page -n HelloWorld -o FitTrackPro/Pages
