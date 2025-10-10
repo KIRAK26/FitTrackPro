@@ -20,8 +20,8 @@ FitTrackPro is an ASP.NET Core Razor Pages app that consolidates workout managem
 
 ## 📦 Getting Started
 
-### 1) Clone
-```bash
+## 1 Clone
+
 git clone https://github.com/<your-username>/FitTrackPro.git
 cd FitTrackPro
 
@@ -32,11 +32,11 @@ dotnet run --project ./FitTrackPro
 
 Open in browser:
 
-    HTTPS: https://localhost:7112
+HTTPS: https://localhost:7112
 
 HTTP: http://localhost:5000
 
-    If HTTPS warns about certificate locally, it’s safe for development.
+If HTTPS warns about certificate locally, it’s safe for development.
 
 ## 🧭 Project Structure
 
