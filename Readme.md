@@ -45,7 +45,7 @@ dotnet run --project ./FitTrackPro
 ```
 
 The application will be running at:
--   **HTTPS**: `https://localhost:7112`
+-   **HTTPS**: `https://localhost:7178`
 
 
 
