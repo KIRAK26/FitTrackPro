@@ -53,6 +53,35 @@ The application will be running at:
 <br>
 
 
+
+## 🔧 Local Development Setup
+1.Install EF Core Tools (One-Time Setup)
+This project uses Entity Framework Core for its database. You must install the specific command-line tools version that matches our project's SDK. You only need to do this once on your machine.
+
+```shell
+dotnet tool install --global dotnet-ef --version 8.0.0
+```
+
+
+2.Restore Project Dependencies
+This command reads the .csproj file and downloads all the necessary packages defined for the project.
+
+
+```shell
+dotnet restore
+```
+
+3.Create the Local Database
+This command finds the migration files that exist in the repository and runs them to create the fittrack.db database file on your local machine. You do not need to create migrations, only apply them.
+
+
+```shell
+dotnet ef database update --project FitTrackPro
+```
+
+After these steps, your local environment will be fully configured and ready. You can now run the application.
+
+
 ## 🧭 Project Structure
 
 The repository is structured to separate concerns and maintain clarity.
