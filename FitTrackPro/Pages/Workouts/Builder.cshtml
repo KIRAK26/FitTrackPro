@@ -1,0 +1,48 @@
+﻿@page
+@model FitTrackPro.Pages.Workouts.BuilderModel
+@{
+    ViewData["Title"] = "Workout Builder";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4>Create a new custom workout routine</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="WorkoutRoutine.Name" class="control-label">Routine Name</label>
+                <input asp-for="WorkoutRoutine.Name" class="form-control" />
+                <span asp-validation-for="WorkoutRoutine.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="WorkoutRoutine.Description" class="control-label"></label>
+                <textarea asp-for="WorkoutRoutine.Description" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="WorkoutRoutine.Description" class="text-danger"></span>
+            </div>
+
+            <h5 class="mt-4">Select Exercises</h5>
+            <div class="list-group" style="height: 300px; overflow-y: scroll;">
+                @foreach (var exercise in Model.AllExercises)
+                {
+                        <label class="list-group-item">
+                            <input type="checkbox" name="SelectedExerciseIds" value="@exercise.Id" class="form-check-input me-1">
+                        @exercise.Name (@exercise.MuscleGroup)
+                        </label>
+                }
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Create Routine" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to Library</a>
+</div>

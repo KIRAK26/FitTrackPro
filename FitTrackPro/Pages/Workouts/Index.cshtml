@@ -1,4 +1,33 @@
 ﻿@page
 @model FitTrackPro.Pages.Workouts.IndexModel
 @{
+    ViewData["Title"] = "Exercise Library";
 }
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New Exercise</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Muscle Group</th>
+            <th>Difficulty</th>
+            <th>Equipment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Exercises)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.MuscleGroup)</td>
+                <td>@Html.DisplayFor(modelItem => item.Difficulty)</td>
+                <td>@Html.DisplayFor(modelItem => item.Equipment)</td>
+            </tr>
+        }
+    </tbody>
+</table>
