@@ -1,4 +1,58 @@
 ﻿@page
 @model FitTrackPro.Pages.Workouts.HistoryModel
 @{
+    ViewData["Title"] = "Workout History";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.SessionHistory != null && Model.SessionHistory.Any())
+{
+    foreach (var session in Model.SessionHistory.OrderByDescending(s => s.StartTime))
+    {
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            Workout on @session.StartTime.ToString("dddd, dd MMMM yyyy")
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                @if (session.SessionLogs != null && session.SessionLogs.Any())
+                {
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Exercise</th>
+                                            <th>Set</th>
+                                            <th>Weight (kg)</th>
+                                            <th>Reps</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                            @foreach (var log in session.SessionLogs)
+                            {
+                                var exercise = Model.GetExerciseById(log.ExerciseId);
+                                                <tr>
+                                                    <td>@(exercise?.Name ?? "Unknown Exercise")</td>
+                                                    <td>@log.SetNumber</td>
+                                                    <td>@log.Weight?.ToString("G29")</td>
+                                                    <td>@log.Reps</td>
+                                                    <td>@log.Notes</td>
+                                                </tr>
+                            }
+                                    </tbody>
+                                </table>
+                }
+                else
+                {
+                                <p class="text-muted">No details were logged for this session.</p>
+                }
+                    </div>
+                </div>
+    }
+}
+else
+{
+        <p>You have no workout history yet. Go start a session!</p>
 }

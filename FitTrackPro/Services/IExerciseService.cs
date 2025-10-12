@@ -7,6 +7,7 @@ namespace FitTrackPro.Services
     public interface IExerciseService
     {
         Task<List<Exercise>> GetAllExercisesAsync();
+        Task<List<Exercise>> GetAllExercisesAsync(string searchTerm);
         Task AddExerciseAsync(Exercise exercise);
     }
 }
