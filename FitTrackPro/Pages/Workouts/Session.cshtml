@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{routineId:int}"
 @model FitTrackPro.Pages.Workouts.SessionModel
 @{
     ViewData["Title"] = "Active Workout Session";
@@ -11,22 +11,40 @@
         <hr />
 
         <form method="post">
-        @foreach (var routineExercise in Model.CurrentRoutine.RoutineExercises)
+            <input type="hidden" asp-for="RoutineId" />
+        @for (var i = 0; i < Model.Logs.Count; i++)
         {
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            <h5>@routineExercise.Exercise.Name</h5>
-                        </div>
-                        <div class="card-body">
+            // Find the corresponding exercise details
+            var routineExercise = Model.CurrentRoutine.RoutineExercises
+                .FirstOrDefault(re => re.ExerciseId == Model.Logs[i].ExerciseId);
+
+            if (i == 0 || Model.Logs[i].ExerciseId != Model.Logs[i - 1].ExerciseId)
+            {
+                // Display exercise name only for the first set of that exercise
+                            <h4 class="mt-4">@routineExercise.Exercise.Name</h4>
                             <p><strong>Target:</strong> @routineExercise.Sets sets of @routineExercise.Reps reps.</p>
+            }
 
-                            <p class="text-muted">Logging form will go here.</p>
+                    <input type="hidden" asp-for="Logs[i].ExerciseId" />
+                    <input type="hidden" asp-for="Logs[i].SetNumber" />
 
+                    <div class="row align-items-center mb-2">
+                        <div class="col-auto">
+                            <label class="col-form-label">Set @Model.Logs[i].SetNumber</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Logs[i].Weight" class="form-control" placeholder="Weight (kg)" />
+                        </div>
+                        <div class="col">
+                            <input asp-for="Logs[i].Reps" class="form-control" placeholder="Reps" />
+                        </div>
+                        <div class="col-4">
+                            <input asp-for="Logs[i].Notes" class="form-control" placeholder="Notes (optional)" />
                         </div>
                     </div>
         }
 
-            <button type="submit" class="btn btn-lg btn-success">Finish Workout</button>
+            <button type="submit" class="btn btn-lg btn-success mt-4">Finish Workout</button>
         </form>
 }
 else
