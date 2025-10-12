@@ -1,4 +1,35 @@
 ﻿@page
 @model FitTrackPro.Pages.Workouts.SessionModel
 @{
+    ViewData["Title"] = "Active Workout Session";
+}
+
+@if (Model.CurrentRoutine != null)
+{
+        <h1>@Model.CurrentRoutine.Name</h1>
+        <p>@Model.CurrentRoutine.Description</p>
+        <hr />
+
+        <form method="post">
+        @foreach (var routineExercise in Model.CurrentRoutine.RoutineExercises)
+        {
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5>@routineExercise.Exercise.Name</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Target:</strong> @routineExercise.Sets sets of @routineExercise.Reps reps.</p>
+
+                            <p class="text-muted">Logging form will go here.</p>
+
+                        </div>
+                    </div>
+        }
+
+            <button type="submit" class="btn btn-lg btn-success">Finish Workout</button>
+        </form>
+}
+else
+{
+        <p>Could not load the workout routine.</p>
 }

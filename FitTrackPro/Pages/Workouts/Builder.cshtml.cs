@@ -20,7 +20,7 @@ namespace FitTrackPro.Pages.Workouts
         }
 
         [BindProperty]
-        public WorkoutRoutine WorkoutRoutine { get; set; }
+        public WorkoutRoutine RoutineInput { get; set; }
 
         [BindProperty]
         public List<int> SelectedExerciseIds { get; set; }
@@ -30,12 +30,13 @@ namespace FitTrackPro.Pages.Workouts
         public async Task<IActionResult> OnGetAsync()
         {
             AllExercises = await _exerciseService.GetAllExercisesAsync();
-            WorkoutRoutine = new WorkoutRoutine(); // Initialize for the form
+            RoutineInput = new WorkoutRoutine(); // Initialize for the form
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // The asp-for tag helpers bind to RoutineInput, so we check that
             if (!ModelState.IsValid || SelectedExerciseIds == null || !SelectedExerciseIds.Any())
             {
                 // If something is wrong, reload the page with the list of exercises
@@ -43,19 +44,26 @@ namespace FitTrackPro.Pages.Workouts
                 return Page();
             }
 
-            // Create RoutineExercise objects for each selected exercise
-            WorkoutRoutine.RoutineExercises = SelectedExerciseIds.Select(id => new RoutineExercise
+            // --- REVISED LOGIC ---
+            // 1. Create a new routine object instead of using the bound one directly.
+            var newRoutine = new WorkoutRoutine
+            {
+                Name = RoutineInput.Name,
+                Description = RoutineInput.Description
+            };
+
+            // 2. Create the list of exercises for this new routine.
+            newRoutine.RoutineExercises = SelectedExerciseIds.Select(id => new RoutineExercise
             {
                 ExerciseId = id,
-                // Default values, can be edited later
                 Sets = 3,
                 Reps = "10",
                 RestPeriodSeconds = 60
             }).ToList();
 
-            await _workoutService.CreateWorkoutRoutineAsync(WorkoutRoutine);
+            // 3. Save the newly created and fully populated routine.
+            await _workoutService.CreateWorkoutRoutineAsync(newRoutine);
 
-            // For now, redirect back to the exercise library
             return RedirectToPage("./Index");
         }
     }
