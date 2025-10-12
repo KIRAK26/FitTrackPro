@@ -15,5 +15,12 @@ namespace FitTrackPro.Models
 
         // Navigation property for all the exercises in this routine
         public ICollection<RoutineExercise> RoutineExercises { get; set; }
+
+        public WorkoutRoutine()
+        {
+            // Initialize the collection to prevent null reference issues.
+            RoutineExercises = new HashSet<RoutineExercise>();
+        }
+        
     }
 }
