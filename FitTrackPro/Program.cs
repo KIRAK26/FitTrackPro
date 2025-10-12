@@ -1,6 +1,7 @@
 
 using FitTrackPro.Data;
 using Microsoft.EntityFrameworkCore;
+using FitTrackPro.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<FitTrackPro.Data.ApplicationDbContext>(options =>
 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+builder.Services.AddScoped<IExerciseService, ExerciseService>();
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 
 var app = builder.Build();
 
