@@ -66,18 +66,23 @@ namespace FitTrackPro.Pages.Workouts
                 return Page();
             }
 
+          
+
+
             var session = new WorkoutSession
             {
                 WorkoutRoutineId = RoutineId,
-                StartTime = DateTime.UtcNow,
-                EndTime = DateTime.UtcNow, // For simplicity, we set EndTime to now
-                // Filter out logs where the user didn't input any data
+                StartTime = Logs.Any() ? DateTime.UtcNow : DateTime.UtcNow, // For simplicity, we set EndTime to now
+                // Filter out logs where the user didn't input any data                                                            
                 SessionLogs = Logs.Where(log => log.Weight.HasValue || log.Reps.HasValue).ToList()
             };
 
             // Only save the session if there is at least one valid log entry
             if (session.SessionLogs.Any())
             {
+
+                session.StartTime = DateTime.UtcNow; 
+                session.EndTime = DateTime.UtcNow;   
                 await _workoutService.AddSessionLogAsync(session);
             }
 

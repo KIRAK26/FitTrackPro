@@ -11,7 +11,7 @@ namespace FitTrackPro.Models
         // Foreign key to WorkoutSession
         public int WorkoutSessionId { get; set; }
         [ForeignKey("WorkoutSessionId")]
-        public WorkoutSession WorkoutSession { get; set; }
+        public WorkoutSession ? WorkoutSession { get; set; }
 
         // The exercise that was performed
         public int ExerciseId { get; set; }
