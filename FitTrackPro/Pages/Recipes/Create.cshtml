@@ -1,0 +1,114 @@
+@page
+@model FitTrackPro.Pages.Recipes.CreateModel
+@{
+    ViewData["Title"] = "Create Custom Recipe";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <a asp-page="./Index" class="btn btn-secondary">Back to Recipes</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0">Create Custom Recipe</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="recipe.recipeName" class="form-label">Recipe Name</label>
+                            <input asp-for="recipe.recipeName" class="form-control" required />
+                            <span asp-validation-for="recipe.recipeName" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="recipe.category" class="form-label">Category</label>
+                                <select asp-for="recipe.category" class="form-select" required>
+                                    <option value="">Select Category</option>
+                                    <option value="0">Breakfast</option>
+                                    <option value="1">Lunch</option>
+                                    <option value="2">Dinner</option>
+                                    <option value="3">Snack</option>
+                                </select>
+                                <span asp-validation-for="recipe.category" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="recipe.prepTimeMinutes" class="form-label">Prep Time (min)</label>
+                                <input asp-for="recipe.prepTimeMinutes" type="number" class="form-control" required min="1" />
+                                <span asp-validation-for="recipe.prepTimeMinutes" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="recipe.servings" class="form-label">Servings</label>
+                                <input asp-for="recipe.servings" type="number" class="form-control" required min="1" />
+                                <span asp-validation-for="recipe.servings" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ingredients</label>
+                            <textarea asp-for="ingredientsInput" class="form-control" rows="6" required
+                                      placeholder="Enter one ingredient per line in format: quantity|unit|name|category&#10;Example:&#10;2|cups|Flour|Pantry&#10;1|tsp|Salt|Spices&#10;3|whole|Eggs|Dairy"></textarea>
+                            <small class="form-text text-muted">
+                                Format: quantity|unit|name|category (Categories: Produce, Dairy, Meat, Seafood, Pantry, Spices, Frozen, Bakery, Beverages, Other)
+                            </small>
+                            <span asp-validation-for="ingredientsInput" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="recipe.instructions" class="form-label">Instructions</label>
+                            <textarea asp-for="recipe.instructions" class="form-control" rows="6" required
+                                      placeholder="Enter cooking instructions, one step per line..."></textarea>
+                            <span asp-validation-for="recipe.instructions" class="text-danger"></span>
+                        </div>
+
+                        <h5 class="mb-3">Nutrition Information (Per Serving)</h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="recipe.caloriesPerServing" class="form-label">Calories</label>
+                                <input asp-for="recipe.caloriesPerServing" type="number" class="form-control" required min="0" />
+                                <span asp-validation-for="recipe.caloriesPerServing" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="recipe.proteinGrams" class="form-label">Protein (g)</label>
+                                <input asp-for="recipe.proteinGrams" type="number" step="0.1" class="form-control" required min="0" />
+                                <span asp-validation-for="recipe.proteinGrams" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="recipe.carbsGrams" class="form-label">Carbohydrates (g)</label>
+                                <input asp-for="recipe.carbsGrams" type="number" step="0.1" class="form-control" required min="0" />
+                                <span asp-validation-for="recipe.carbsGrams" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="recipe.fatsGrams" class="form-label">Fats (g)</label>
+                                <input asp-for="recipe.fatsGrams" type="number" step="0.1" class="form-control" required min="0" />
+                                <span asp-validation-for="recipe.fatsGrams" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">Create Recipe</button>
+                            <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
