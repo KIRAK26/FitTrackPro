@@ -49,3 +49,8 @@ dist/
 # macOS system
 *.DS_Store
 
+node_modules/
+bootstrap/
+package.json
+package-lock.json
+
