@@ -23,5 +23,5 @@ body {
 
 .custom-container {
   max-width: 800px;
-  background-color: lightgray;
+  /* background-color: lightgray; */
 }
