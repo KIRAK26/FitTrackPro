@@ -17,7 +17,7 @@ namespace FitTrackPro.Models
         public string templateName { get; set; } = string.Empty;
 
         [StringLength(500)]
-        public string description { get; set; } = string.Empty;
+        public string? description { get; set; }
 
         public DateTime createdDate { get; set; } = DateTime.UtcNow;
 

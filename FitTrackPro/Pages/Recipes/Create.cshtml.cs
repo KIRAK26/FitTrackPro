@@ -23,7 +23,7 @@ namespace FitTrackPro.Pages.Recipes
         public Recipe recipe { get; set; } = new Recipe();
 
         [BindProperty]
-        public string ingredientsInput { get; set; } = string.Empty;
+        public List<IngredientInput> ingredients { get; set; } = new List<IngredientInput>();
 
         public void OnGet()
         {
@@ -31,45 +31,40 @@ namespace FitTrackPro.Pages.Recipes
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (ingredients == null || !ingredients.Any())
+            {
+                ModelState.AddModelError(string.Empty, "Please add at least one ingredient.");
+                return Page();
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            // Parse ingredients from input (format: "quantity|unit|name|category" per line)
-            var ingredients = new List<Ingredient>();
+            recipe.isCustom = true;
+            recipe.createdDate = DateTime.Now;
 
-            if (!string.IsNullOrWhiteSpace(ingredientsInput))
+            var ingredientEntities = ingredients.Select(input => new Ingredient
             {
-                var lines = ingredientsInput.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                quantity = input.quantity,
+                unit = input.unit,
+                ingredientName = input.ingredientName,
+                category = input.category
+            }).ToList();
 
-                foreach (var line in lines)
-                {
-                    var parts = line.Trim().Split('|');
-                    if (parts.Length >= 4)
-                    {
-                        var ingredient = new Ingredient
-                        {
-                            quantity = parts[0].Trim(),
-                            unit = parts[1].Trim(),
-                            ingredientName = parts[2].Trim(),
-                            category = Enum.TryParse<IngredientCategory>(parts[3].Trim(), out var cat) ? cat : IngredientCategory.Other
-                        };
-                        ingredients.Add(ingredient);
-                    }
-                }
-            }
-
-            if (!ingredients.Any())
-            {
-                ModelState.AddModelError("ingredientsInput", "Please add at least one ingredient.");
-                return Page();
-            }
-
-            await recipeService.createRecipeAsync(recipe, ingredients);
+            await recipeService.createRecipeAsync(recipe, ingredientEntities);
 
             TempData["SuccessMessage"] = "Recipe created successfully!";
             return RedirectToPage("./Index");
+        }
+
+        public class IngredientInput
+        {
+            public string quantity { get; set; } = string.Empty;
+            public string unit { get; set; } = string.Empty;
+            public string ingredientName { get; set; } = string.Empty;
+            public IngredientCategory category { get; set; }
         }
     }
 }

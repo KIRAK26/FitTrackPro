@@ -91,6 +91,10 @@ namespace FitTrackPro.Data
                     .IsRequired()
                     .HasMaxLength(200);
 
+                entity.Property(t => t.description)
+                    .HasMaxLength(500)
+                    .IsRequired(false);
+
                 // One-to-many relationship: Template -> TemplateItems (Cascade delete)
                 entity.HasMany(t => t.templateItems)
                     .WithOne(ti => ti.template)

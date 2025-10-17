@@ -12,19 +12,28 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-10 offset-md-1">
             <div class="card">
                 <div class="card-header bg-success text-white">
                     <h2 class="mb-0">Create Custom Recipe</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    @if (ViewData.ModelState.ErrorCount > 0)
+                    {
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
 
+                    <form method="post" id="recipeForm" novalidate>
                         <div class="mb-3">
                             <label asp-for="recipe.recipeName" class="form-label">Recipe Name</label>
-                            <input asp-for="recipe.recipeName" class="form-control" required />
-                            <span asp-validation-for="recipe.recipeName" class="text-danger"></span>
+                            <input asp-for="recipe.recipeName" class="form-control" />
                         </div>
 
                         <div class="row">
@@ -37,37 +46,31 @@
                                     <option value="2">Dinner</option>
                                     <option value="3">Snack</option>
                                 </select>
-                                <span asp-validation-for="recipe.category" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-3 mb-3">
                                 <label asp-for="recipe.prepTimeMinutes" class="form-label">Prep Time (min)</label>
                                 <input asp-for="recipe.prepTimeMinutes" type="number" class="form-control" required min="1" />
-                                <span asp-validation-for="recipe.prepTimeMinutes" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-3 mb-3">
                                 <label asp-for="recipe.servings" class="form-label">Servings</label>
                                 <input asp-for="recipe.servings" type="number" class="form-control" required min="1" />
-                                <span asp-validation-for="recipe.servings" class="text-danger"></span>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Ingredients</label>
-                            <textarea asp-for="ingredientsInput" class="form-control" rows="6" required
-                                      placeholder="Enter one ingredient per line in format: quantity|unit|name|category&#10;Example:&#10;2|cups|Flour|Pantry&#10;1|tsp|Salt|Spices&#10;3|whole|Eggs|Dairy"></textarea>
-                            <small class="form-text text-muted">
-                                Format: quantity|unit|name|category (Categories: Produce, Dairy, Meat, Seafood, Pantry, Spices, Frozen, Bakery, Beverages, Other)
-                            </small>
-                            <span asp-validation-for="ingredientsInput" class="text-danger"></span>
+                        <div class="mb-4">
+                            <h5 class="mb-3">Ingredients</h5>
+                            <div id="ingredientsList"></div>
+                            <button type="button" class="btn btn-secondary mt-2" onclick="addIngredientRow()">
+                                Add Ingredient
+                            </button>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="recipe.instructions" class="form-label">Instructions</label>
                             <textarea asp-for="recipe.instructions" class="form-control" rows="6" required
                                       placeholder="Enter cooking instructions, one step per line..."></textarea>
-                            <span asp-validation-for="recipe.instructions" class="text-danger"></span>
                         </div>
 
                         <h5 class="mb-3">Nutrition Information (Per Serving)</h5>
@@ -76,25 +79,21 @@
                             <div class="col-md-6 mb-3">
                                 <label asp-for="recipe.caloriesPerServing" class="form-label">Calories</label>
                                 <input asp-for="recipe.caloriesPerServing" type="number" class="form-control" required min="0" />
-                                <span asp-validation-for="recipe.caloriesPerServing" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label asp-for="recipe.proteinGrams" class="form-label">Protein (g)</label>
                                 <input asp-for="recipe.proteinGrams" type="number" step="0.1" class="form-control" required min="0" />
-                                <span asp-validation-for="recipe.proteinGrams" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label asp-for="recipe.carbsGrams" class="form-label">Carbohydrates (g)</label>
                                 <input asp-for="recipe.carbsGrams" type="number" step="0.1" class="form-control" required min="0" />
-                                <span asp-validation-for="recipe.carbsGrams" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label asp-for="recipe.fatsGrams" class="form-label">Fats (g)</label>
                                 <input asp-for="recipe.fatsGrams" type="number" step="0.1" class="form-control" required min="0" />
-                                <span asp-validation-for="recipe.fatsGrams" class="text-danger"></span>
                             </div>
                         </div>
 
@@ -109,6 +108,94 @@
     </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<script>
+    let ingredientCount = 0;
+
+    function addIngredientRow() {
+        const container = document.getElementById('ingredientsList');
+        const row = document.createElement('div');
+        row.className = 'row mb-3 ingredient-row';
+        row.id = 'ingredient-' + ingredientCount;
+
+        row.innerHTML = `
+            <div class="col-md-2">
+                <label class="form-label">Quantity</label>
+                <input type="text"
+                       class="form-control"
+                       name="ingredients[${ingredientCount}].quantity"
+                       placeholder="1.5" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Unit</label>
+                <select class="form-select"
+                        name="ingredients[${ingredientCount}].unit">
+                    <option value="">Select...</option>
+                    <option value="cup">cup</option>
+                    <option value="cups">cups</option>
+                    <option value="tbsp">tbsp</option>
+                    <option value="tsp">tsp</option>
+                    <option value="oz">oz</option>
+                    <option value="lb">lb</option>
+                    <option value="g">g</option>
+                    <option value="kg">kg</option>
+                    <option value="ml">ml</option>
+                    <option value="L">L</option>
+                    <option value="piece">piece</option>
+                    <option value="pieces">pieces</option>
+                    <option value="clove">clove</option>
+                    <option value="cloves">cloves</option>
+                    <option value="pinch">pinch</option>
+                    <option value="to taste">to taste</option>
+                    <option value="whole">whole</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Ingredient Name</label>
+                <input type="text"
+                       class="form-control"
+                       name="ingredients[${ingredientCount}].ingredientName"
+                       placeholder="e.g., chicken breast" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Category</label>
+                <select class="form-select"
+                        name="ingredients[${ingredientCount}].category">
+                    <option value="">Select...</option>
+                    <option value="0">Produce</option>
+                    <option value="1">Dairy</option>
+                    <option value="2">Meat</option>
+                    <option value="3">Seafood</option>
+                    <option value="4">Pantry</option>
+                    <option value="5">Spices</option>
+                    <option value="6">Frozen</option>
+                    <option value="7">Bakery</option>
+                    <option value="8">Beverages</option>
+                    <option value="9">Other</option>
+                </select>
+            </div>
+
+            <div class="col-md-1">
+                <label class="form-label">&nbsp;</label>
+                <button type="button"
+                        class="btn btn-danger w-100"
+                        onclick="removeIngredientRow(${ingredientCount})">
+                    X
+                </button>
+            </div>
+        `;
+
+        container.appendChild(row);
+        ingredientCount++;
+    }
+
+    function removeIngredientRow(id) {
+        const row = document.getElementById('ingredient-' + id);
+        if (row) {
+            row.remove();
+        }
+    }
+
+</script>
