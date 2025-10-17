@@ -28,6 +28,7 @@ bld/
 
 ## Environment specific files
 appsettings.Development.json
+.env
 
 # Entity Framework migrations cache
 Migrations/obj/
