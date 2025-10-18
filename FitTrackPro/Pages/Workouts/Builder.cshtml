@@ -8,12 +8,13 @@
 }
 
 <style>
-    /* ... (All your styles) ... */
+    
     .form-control-modern {
         padding: 0.85rem 1rem;
         font-size: 1rem;
-        border-radius: 0.375rem; 
+        border-radius: 0.375rem; /* Bootstrap's 'rounded' */
         transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        
     }
 
     .form-control-modern:focus {
@@ -22,6 +23,25 @@
         outline: 0;
     }
 
+    
+    
+   .form-select-modern {
+        padding-top: 0.85rem;
+        padding-bottom: 0.85rem;
+        padding-left: 1rem;
+        font-size: 1rem; 
+        
+    }
+
+   
+    .form-select-modern:focus {
+        border-color: #1b6ec2;
+        box-shadow: 0 0 0 0.25rem rgba(27, 110, 194, 0.25);
+        outline: 0;
+    }
+
+
+   
     .workout-builder-list {
         height: 400px;
         overflow-y: auto;
@@ -99,18 +119,17 @@
         <div class="col-md-6">
             <h5 class="mb-3">Exercise Library</h5>
 
-            <div class="row mb-2">
-                <div class="col-7 pe-1"> 
+           <div class="d-flex mb-2">
+                <div style="flex-basis: 0; flex-grow: 7;" class="pe-1">
                     <input type="text" id="exercise-search" class="form-control form-control-modern" placeholder="Search by name...">
                 </div>
-                <div class="col-5 ps-1">
-                    <select id="muscle-group-filter" class="form-control form-control-modern">
+                <div style="flex-basis: 0; flex-grow: 5;" class="ps-1">
+                    <select id="muscle-group-filter" class="form-select form-select-modern">
                         </select>
                 </div>
             </div>
 
             <div id="available-exercises-list" class="workout-builder-list">
-...
                 </div>
         </div>
 
@@ -144,19 +163,14 @@
                 const availableListEl = document.getElementById('available-exercises-list');
                 const selectedListEl = document.getElementById('selected-exercises-list');
                 const searchInputEl = document.getElementById('exercise-search');
-
-                // NEW: Get reference to the muscle group filter
                 const muscleGroupFilterEl = document.getElementById('muscle-group-filter');
-
                 const hiddenInputContainerEl = document.getElementById('selected-exercise-inputs-container');
 
-                // NEW: Function to populate the muscle group filter
+                // 3. Function to populate the muscle group filter
                 function populateMuscleGroupFilter() {
-                    // Use a Set to get unique muscle groups
                     const muscleGroups = [...new Set(allExercises.map(ex => ex.muscleGroup))];
-                    muscleGroups.sort(); // Sort them alphabetically
+                    muscleGroups.sort(); 
 
-                    // Add the 'All' option first
                     let filterHtml = '<option value="all">All Muscle Groups</option>';
 
                     muscleGroups.forEach(group => {
@@ -166,25 +180,21 @@
                     muscleGroupFilterEl.innerHTML = filterHtml;
                 }
 
-                // 3. Main render function
+                // 4. Main render function
                 function renderLists() {
 
                     let availableHtml = '';
                     let selectedHtml = '';
                     let hiddenInputsHtml = '';
 
-                    // MODIFIED: Get values from BOTH filters
                     const nameFilter = searchInputEl.value.toLowerCase();
-                    const muscleGroupFilter = muscleGroupFilterEl.value; // This will be "all" or "Back", "Chest", etc.
+                    const muscleGroupFilter = muscleGroupFilterEl.value; 
 
                     allExercises.forEach(exercise => {
-
                         const exerciseNameLower = exercise.name.toLowerCase();
 
-                        // Check if the item is selected
                         if (selectedExerciseIds.has(exercise.id)) {
                             // --- Item is SELECTED ---
-
                             selectedHtml += `
                                 <div class="list-group-item builder-item">
                                     <div>
@@ -195,22 +205,14 @@
                                         &times; </button>
                                 </div>
                             `;
-
                             hiddenInputsHtml += 
                                 `<input type="hidden" name="SelectedExerciseIds" value="${exercise.id}" />`;
 
                         } else {
                             // --- Item is NOT selected ---
-
-                            // MODIFIED: Filtering logic now checks name AND muscle group separately
-
-                            // Check 1: Does it match the name search? (Empty search counts as a match)
                             const matchesName = nameFilter === '' || exerciseNameLower.includes(nameFilter);
-
-                            // Check 2: Does it match the muscle group filter? ("all" counts as a match)
                             const matchesMuscleGroup = muscleGroupFilter === 'all' || exercise.muscleGroup === muscleGroupFilter;
 
-                            // Only show in the available list if it matches BOTH filters
                             if (matchesName && matchesMuscleGroup) {
                                 availableHtml += `
                                     <div class="list-group-item list-group-item-action builder-item add-btn" data-id="${exercise.id}" title="Add">
@@ -231,15 +233,10 @@
                     hiddenInputContainerEl.innerHTML = hiddenInputsHtml;
                 }
 
-                // 4. Event Listeners 
-
-                // Re-render when user types in the search box
+                // 5. Event Listeners 
                 searchInputEl.addEventListener('input', renderLists);
-
-                // NEW: Re-render when user changes the muscle group
                 muscleGroupFilterEl.addEventListener('change', renderLists);
 
-                // Add an exercise (unchanged)
                 availableListEl.addEventListener('click', function(e) {
                     const target = e.target.closest('.add-btn');
                     if (target) {
@@ -250,7 +247,6 @@
                     }
                 });
 
-                // Remove an exercise (unchanged)
                 selectedListEl.addEventListener('click', function(e) {
                     const target = e.target.closest('.remove-btn');
                     if (target) {
@@ -261,12 +257,8 @@
                     }
                 });
 
-                // 5. Initial setup
-
-                // NEW: Call the function to populate the dropdown
+                // 6. Initial setup
                 populateMuscleGroupFilter(); 
-
-                // Initial render
                 renderLists();
             });
         </script>
