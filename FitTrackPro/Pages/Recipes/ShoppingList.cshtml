@@ -1,0 +1,169 @@
+@page
+@model FitTrackPro.Pages.Recipes.ShoppingListModel
+@{
+    ViewData["Title"] = "Shopping List";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1>Shopping List Generator</h1>
+            @if (Model.dateRangeStart.HasValue && Model.dateRangeEnd.HasValue)
+            {
+                <p class="text-muted">Shopping list from @Model.dateRangeStart.Value.ToString("MMM dd, yyyy") - @Model.dateRangeEnd.Value.ToString("MMM dd, yyyy")</p>
+            }
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#generateModal">
+                Generate from Meal Plan
+            </button>
+            <a asp-page="./Planner" class="btn btn-info">Go to Meal Planner</a>
+            <a asp-page="./Index" class="btn btn-secondary">Back to Recipes</a>
+
+            @if (Model.totalItems > 0)
+            {
+                <form method="post" asp-page-handler="ClearAll" class="d-inline float-end"
+                      onsubmit="return confirm('Clear entire shopping list?');">
+                    <button type="submit" class="btn btn-danger">Clear All</button>
+                </form>
+
+                <form method="post" asp-page-handler="ClearChecked" class="d-inline float-end me-2"
+                      onsubmit="return confirm('Remove all checked items?');">
+                    <button type="submit" class="btn btn-warning">Clear Checked</button>
+                </form>
+            }
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    @if (Model.totalItems > 0)
+    {
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><strong>Shopping Progress</strong></span>
+                            <span>@Model.checkedItems / @Model.totalItems items (@Model.completionPercentage.ToString("F1")%)</span>
+                        </div>
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar bg-success" role="progressbar"
+                                 style="width: @Model.completionPercentage%"
+                                 aria-valuenow="@Model.completionPercentage" aria-valuemin="0" aria-valuemax="100">
+                                @Model.completionPercentage.ToString("F0")%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Shopping List Items Grouped by Category -->
+    @if (Model.groupedItems.Any())
+    {
+        <div class="row">
+            @foreach (var categoryGroup in Model.groupedItems.OrderBy(g => g.Key))
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">@categoryGroup.Key (@categoryGroup.Value.Count items)</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                @foreach (var item in categoryGroup.Value.OrderBy(i => i.ingredientName))
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center @(item.isChecked ? "text-decoration-line-through text-muted" : "")">
+                                        <div class="form-check">
+                                            <form method="post" asp-page-handler="ToggleItem" asp-route-itemId="@item.itemId">
+                                                <input class="form-check-input" type="checkbox"
+                                                       @(item.isChecked ? "checked" : "")
+                                                       onchange="this.form.submit()">
+                                                <label class="form-check-label">
+                                                    <strong>@item.ingredientName</strong><br />
+                                                    <small>@item.totalQuantity @item.unit</small>
+                                                </label>
+                                            </form>
+                                        </div>
+                                        <span class="badge @(item.isChecked ? "bg-success" : "bg-secondary")"
+                                            aria-label="@(item.isChecked ? "Checked" : "Unchecked")">
+                                            @item.statusIcon
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <h4>No Shopping List Yet</h4>
+                    <p>Click "Generate from Meal Plan" to create a shopping list based on your weekly meal plan.</p>
+                    <p class="mb-0">Make sure you have meals planned in the <a asp-page="./Planner" class="alert-link">Meal Planner</a> first!</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Generate Modal -->
+<div class="modal fade" id="generateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Generate Shopping List</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" asp-page-handler="Generate">
+                <div class="modal-body">
+                    <p>Generate a shopping list from your meal plan.</p>
+                    <div class="mb-3">
+                        <label class="form-label">Start Date:</label>
+                        <input type="date" name="startDate" class="form-control"
+                               value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                        <small class="form-text text-muted">Select the first day of your date range.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Date:</label>
+                        <input type="date" name="endDate" class="form-control"
+                               value="@DateTime.Today.AddDays(6).ToString("yyyy-MM-dd")" required />
+                        <small class="form-text text-muted">Select the last day of your date range.</small>
+                    </div>
+                    <div class="alert alert-warning">
+                        <small>Note: This will replace your current shopping list.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Generate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

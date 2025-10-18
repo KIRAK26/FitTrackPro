@@ -18,185 +18,462 @@ namespace FitTrackPro.Migrations
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
 
             modelBuilder.Entity("FitTrackPro.Models.Exercise", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<decimal?>("CaloriesBurnedPerMinute")
-                        .HasColumnType("TEXT");
+                b.Property<decimal?>("CaloriesBurnedPerMinute")
+                    .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("CaloriesBurnedPerRep")
-                        .HasColumnType("TEXT");
+                b.Property<decimal?>("CaloriesBurnedPerRep")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Difficulty")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Difficulty")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Equipment")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Equipment")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Instructions")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Instructions")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("MuscleGroup")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("MuscleGroup")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Exercises");
-                });
+                b.ToTable("Exercises");
+            });
 
+            
             modelBuilder.Entity("FitTrackPro.Models.RoutineExercise", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("ExerciseId")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("ExerciseId")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Reps")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Reps")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("RestPeriodSeconds")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("RestPeriodSeconds")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("Sets")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("Sets")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("WorkoutRoutineId")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("WorkoutRoutineId")
+                    .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ExerciseId");
+                b.HasIndex("ExerciseId");
 
-                    b.HasIndex("WorkoutRoutineId");
+                b.HasIndex("WorkoutRoutineId");
 
-                    b.ToTable("RoutineExercises");
-                });
+                b.ToTable("RoutineExercises");
+            });
 
             modelBuilder.Entity("FitTrackPro.Models.SessionLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("ExerciseId")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("ExerciseId")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Notes")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Notes")
+                    .HasColumnType("TEXT");
 
-                    b.Property<int?>("Reps")
-                        .HasColumnType("INTEGER");
+                b.Property<int?>("Reps")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("SetNumber")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("SetNumber")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<decimal?>("Weight")
-                        .HasColumnType("TEXT");
+                b.Property<decimal?>("Weight")
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("WorkoutSessionId")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("WorkoutSessionId")
+                    .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("WorkoutSessionId");
+                b.HasIndex("WorkoutSessionId");
 
-                    b.ToTable("SessionLogs");
-                });
+                b.ToTable("SessionLogs");
+            });
 
             modelBuilder.Entity("FitTrackPro.Models.WorkoutRoutine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("WorkoutRoutines");
-                });
+                b.ToTable("WorkoutRoutines");
+            });
 
             modelBuilder.Entity("FitTrackPro.Models.WorkoutSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime?>("EndTime")
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("StartTime")
+                    .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("TotalCaloriesBurned")
-                        .HasColumnType("TEXT");
+                b.Property<decimal?>("TotalCaloriesBurned")
+                    .HasColumnType("TEXT");
 
-                    b.Property<int?>("WorkoutRoutineId")
-                        .HasColumnType("INTEGER");
+                b.Property<int?>("WorkoutRoutineId")
+                    .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("WorkoutSessions");
-                });
+                b.ToTable("WorkoutSessions");
+            });
 
+            
+            modelBuilder.Entity("FitTrackPro.Models.Ingredient", b =>
+            {
+                b.Property<int>("ingredientId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("category")
+                    .HasColumnType("INTEGER");
+
+                b.Property<string>("ingredientName")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("quantity")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("TEXT");
+
+                b.Property<int>("recipeId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<string>("unit")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("TEXT");
+
+                b.HasKey("ingredientId");
+
+                b.HasIndex("recipeId");
+
+                b.ToTable("ingredients");
+            });
+
+            modelBuilder.Entity("FitTrackPro.Models.MealPlan", b =>
+            {
+                b.Property<int>("mealPlanId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime>("createdDate")
+                    .HasColumnType("TEXT");
+
+                b.Property<DateTime>("date")
+                    .HasColumnType("TEXT");
+
+                b.Property<bool>("isCompleted")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("mealType")
+                    .HasColumnType("INTEGER");
+
+                b.Property<string>("notes")
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnType("TEXT");
+
+                b.Property<int>("recipeId")
+                    .HasColumnType("INTEGER");
+
+                b.HasKey("mealPlanId");
+
+                b.HasIndex("date");
+
+                b.HasIndex("recipeId");
+
+                b.ToTable("mealPlans");
+            });
+
+            modelBuilder.Entity("FitTrackPro.Models.MealPlanTemplate", b =>
+            {
+                b.Property<int>("templateId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime>("createdDate")
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("description")
+                    .HasMaxLength(500)
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("templateName")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("TEXT");
+
+                b.Property<int>("timesUsed")
+                    .HasColumnType("INTEGER");
+
+                b.HasKey("templateId");
+
+                b.ToTable("mealPlanTemplates");
+            });
+
+            modelBuilder.Entity("FitTrackPro.Models.MealPlanTemplateItem", b =>
+            {
+                b.Property<int>("itemId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("dayOfWeek")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("mealType")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("recipeId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("templateId")
+                    .HasColumnType("INTEGER");
+
+                b.HasKey("itemId");
+
+                b.HasIndex("recipeId");
+
+                b.HasIndex("templateId");
+
+                b.ToTable("mealPlanTemplateItems");
+            });
+
+            modelBuilder.Entity("FitTrackPro.Models.Recipe", b =>
+            {
+                b.Property<int>("recipeId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("caloriesPerServing")
+                    .HasColumnType("INTEGER");
+
+                b.Property<decimal>("carbsGrams")
+                    .HasPrecision(6, 2)
+                    .HasColumnType("TEXT");
+
+                b.Property<int>("category")
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime>("createdDate")
+                    .HasColumnType("TEXT");
+
+                b.Property<decimal>("fatsGrams")
+                    .HasPrecision(6, 2)
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("instructions")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
+
+                b.Property<bool>("isCustom")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("prepTimeMinutes")
+                    .HasColumnType("INTEGER");
+
+                b.Property<decimal>("proteinGrams")
+                    .HasPrecision(6, 2)
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("recipeName")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("TEXT");
+
+                b.Property<int>("servings")
+                    .HasColumnType("INTEGER");
+
+                b.HasKey("recipeId");
+
+                b.ToTable("recipes");
+            });
+
+            modelBuilder.Entity("FitTrackPro.Models.ShoppingListItem", b =>
+            {
+                b.Property<int>("itemId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("category")
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime?>("checkedDate")
+                    .HasColumnType("TEXT");
+
+                b.Property<DateTime>("generatedDate")
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("ingredientName")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("TEXT");
+
+                b.Property<bool>("isChecked")
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime?>("rangeEndDate")
+                    .HasColumnType("TEXT");
+
+                b.Property<DateTime?>("rangeStartDate")
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("totalQuantity")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("unit")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("TEXT");
+
+                b.HasKey("itemId");
+
+                b.HasIndex("category");
+
+                b.ToTable("shoppingListItems");
+            });
+
+            
             modelBuilder.Entity("FitTrackPro.Models.RoutineExercise", b =>
-                {
-                    b.HasOne("FitTrackPro.Models.Exercise", "Exercise")
-                        .WithMany()
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("FitTrackPro.Models.Exercise", "Exercise")
+                    .WithMany()
+                    .HasForeignKey("ExerciseId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("FitTrackPro.Models.WorkoutRoutine", "WorkoutRoutine")
-                        .WithMany("RoutineExercises")
-                        .HasForeignKey("WorkoutRoutineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("FitTrackPro.Models.WorkoutRoutine", "WorkoutRoutine")
+                    .WithMany("RoutineExercises")
+                    .HasForeignKey("WorkoutRoutineId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Exercise");
+                b.Navigation("Exercise");
 
-                    b.Navigation("WorkoutRoutine");
-                });
+                b.Navigation("WorkoutRoutine");
+            });
 
             modelBuilder.Entity("FitTrackPro.Models.SessionLog", b =>
-                {
-                    b.HasOne("FitTrackPro.Models.WorkoutSession", "WorkoutSession")
-                        .WithMany("SessionLogs")
-                        .HasForeignKey("WorkoutSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("FitTrackPro.Models.WorkoutSession", "WorkoutSession")
+                    .WithMany("SessionLogs")
+                    .HasForeignKey("WorkoutSessionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("WorkoutSession");
-                });
+                b.Navigation("WorkoutSession");
+            });
 
+            
+            modelBuilder.Entity("FitTrackPro.Models.Ingredient", b =>
+            {
+                b.HasOne("FitTrackPro.Models.Recipe", "recipe")
+                    .WithMany("ingredients")
+                    .HasForeignKey("recipeId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("recipe");
+            });
+
+            modelBuilder.Entity("FitTrackPro.Models.MealPlan", b =>
+            {
+                b.HasOne("FitTrackPro.Models.Recipe", "recipe")
+                    .WithMany("mealPlans")
+                    .HasForeignKey("recipeId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
+
+                b.Navigation("recipe");
+            });
+
+            modelBuilder.Entity("FitTrackPro.Models.MealPlanTemplateItem", b =>
+            {
+                b.HasOne("FitTrackPro.Models.Recipe", "recipe")
+                    .WithMany()
+                    .HasForeignKey("recipeId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
+
+                b.HasOne("FitTrackPro.Models.MealPlanTemplate", "template")
+                    .WithMany("templateItems")
+                    .HasForeignKey("templateId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("recipe");
+
+                b.Navigation("template");
+            });
+
+            
             modelBuilder.Entity("FitTrackPro.Models.WorkoutRoutine", b =>
-                {
-                    b.Navigation("RoutineExercises");
-                });
+            {
+                b.Navigation("RoutineExercises");
+            });
 
             modelBuilder.Entity("FitTrackPro.Models.WorkoutSession", b =>
-                {
-                    b.Navigation("SessionLogs");
-                });
+            {
+                b.Navigation("SessionLogs");
+            });
+
+            
+            modelBuilder.Entity("FitTrackPro.Models.MealPlanTemplate", b =>
+            {
+                b.Navigation("templateItems");
+            });
+
+            modelBuilder.Entity("FitTrackPro.Models.Recipe", b =>
+            {
+                b.Navigation("ingredients");
+
+                b.Navigation("mealPlans");
+            });
 #pragma warning restore 612, 618
         }
     }
