@@ -1,0 +1,27 @@
+﻿
+
+@{
+    var currentPage = ViewContext.RouteData.Values["Page"] as string ?? "/";
+    }
+    
+        <ul class="nav nav-pills mb-3">
+         
+        <li class="nav-item">
+            <a class="nav-link @(currentPage.EndsWith("/Index") ? "active" : "")" asp-page="/Workouts/Index">Exercise Library</a>
+        </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link @(currentPage.EndsWith("/Builder") ? "active" : "")" asp-page="/Workouts/Builder">Workout Builder</a>
+        </li>
+
+
+
+        <li class="nav-item">
+            <a class="nav-link @(currentPage.EndsWith("/History") ? "active" : "")" asp-page="/Workouts/History">Workout History</a>
+        </li>
+    </ul>
+    <hr />
+
+
+

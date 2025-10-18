@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Workout History";
 }
-
+<partial name="_WorkoutNav" />
 <h1>@ViewData["Title"]</h1>
 
 @if (Model.SessionHistory != null && Model.SessionHistory.Any())
