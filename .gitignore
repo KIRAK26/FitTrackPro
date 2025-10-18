@@ -50,3 +50,7 @@ dist/
 # macOS system
 *.DS_Store
 
+# SQLite temporary files
+*.db
+*.db-wal
+*.db-shm
