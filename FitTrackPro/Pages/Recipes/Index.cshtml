@@ -1,0 +1,165 @@
+@page
+@model FitTrackPro.Pages.Recipes.IndexModel
+@{
+    ViewData["Title"] = "Recipe Manager";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="mb-3">Recipe Manager</h1>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center bg-primary text-white">
+                <div class="card-body">
+                    <h3>@Model.statistics.GetValueOrDefault("Total", 0)</h3>
+                    <p class="mb-0">Total Recipes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-success text-white">
+                <div class="card-body">
+                    <h3>@Model.statistics.GetValueOrDefault("Breakfast", 0)</h3>
+                    <p class="mb-0">Breakfast</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-info text-white">
+                <div class="card-body">
+                    <h3>@Model.statistics.GetValueOrDefault("Lunch", 0)</h3>
+                    <p class="mb-0">Lunch</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-warning text-white">
+                <div class="card-body">
+                    <h3>@Model.statistics.GetValueOrDefault("Dinner", 0)</h3>
+                    <p class="mb-0">Dinner</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" name="searchTerm"
+                                   placeholder="Search recipes..." value="@Model.searchTerm" />
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" name="categoryFilter">
+                                <option value="All" selected="@(Model.categoryFilter == "All" || string.IsNullOrEmpty(Model.categoryFilter))">All Categories</option>
+                                <option value="Breakfast" selected="@(Model.categoryFilter == "Breakfast")">Breakfast</option>
+                                <option value="Lunch" selected="@(Model.categoryFilter == "Lunch")">Lunch</option>
+                                <option value="Dinner" selected="@(Model.categoryFilter == "Dinner")">Dinner</option>
+                                <option value="Snack" selected="@(Model.categoryFilter == "Snack")">Snack</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary w-100">Filter</button>
+                            <a asp-page="./Index" class="btn btn-secondary w-100 mt-2">Clear</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <a asp-page="./Create" class="btn btn-success">Add Custom Recipe</a>
+            <a asp-page="./Planner" class="btn btn-primary">Meal Planner</a>
+            <a asp-page="./ShoppingList" class="btn btn-info">Shopping List</a>
+        </div>
+    </div>
+
+    <!-- Recipe Cards -->
+    <div class="row">
+        @if (Model.recipes.Any())
+        {
+            @foreach (var recipe in Model.recipes)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-@(recipe.category.ToString().ToLower() == "breakfast" ? "success" :
+                                                      recipe.category.ToString().ToLower() == "lunch" ? "info" :
+                                                      recipe.category.ToString().ToLower() == "dinner" ? "warning" : "secondary") text-white">
+                            <h5 class="mb-0">@recipe.recipeName</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted mb-2">
+                                <strong>Category:</strong> @recipe.category |
+                                <strong>Prep:</strong> @recipe.prepTimeDisplay
+                            </p>
+                            <p class="mb-2"><strong>Servings:</strong> @recipe.servings</p>
+
+                            <div class="mb-3">
+                                <strong>Nutrition (per serving):</strong>
+                                <ul class="list-unstyled mb-0">
+                                    <li>Calories: @recipe.caloriesPerServing kcal</li>
+                                    <li>Protein: @recipe.proteinGrams g</li>
+                                    <li>Carbs: @recipe.carbsGrams g</li>
+                                    <li>Fats: @recipe.fatsGrams g</li>
+                                </ul>
+                            </div>
+
+                            <p class="mb-2"><small>@recipe.macroSummary</small></p>
+
+                            @if (recipe.isCustom)
+                            {
+                                <span class="badge bg-primary">Custom Recipe</span>
+                            }
+                        </div>
+                        <div class="card-footer">
+                            <a asp-page="./Details" asp-route-id="@recipe.recipeId" class="btn btn-sm btn-primary">View Details</a>
+
+                            @if (recipe.isCustom)
+                            {
+                                <form method="post" asp-page-handler="Delete" asp-route-recipeId="@recipe.recipeId"
+                                      class="d-inline" onsubmit="return confirm('Are you sure you want to delete this recipe?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    No recipes found. Try adjusting your search or filter criteria.
+                </div>
+            </div>
+        }
+    </div>
+</div>

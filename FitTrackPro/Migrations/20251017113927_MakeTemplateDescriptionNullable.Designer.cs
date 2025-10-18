@@ -3,6 +3,7 @@ using System;
 using FitTrackPro.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitTrackPro.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251017113927_MakeTemplateDescriptionNullable")]
+    partial class MakeTemplateDescriptionNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -242,12 +245,6 @@ namespace FitTrackPro.Migrations
 
                     b.Property<bool>("isChecked")
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("rangeEndDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("rangeStartDate")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("totalQuantity")
                         .IsRequired()
