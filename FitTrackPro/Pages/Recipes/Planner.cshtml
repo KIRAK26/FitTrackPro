@@ -36,6 +36,7 @@
             <a asp-page="./Planner" asp-route-weekStart="@Model.currentWeekStart.AddDays(7).ToString("yyyy-MM-dd")" class="btn btn-secondary">Next Week</a>
             <a asp-page="./Index" class="btn btn-info float-end">Back to Recipes</a>
             <a asp-page="./ShoppingList" class="btn btn-success float-end me-2">Shopping List</a>
+            <a asp-page="./Templates" class="btn btn-warning float-end me-2">View Templates</a>
         </div>
     </div>
 
@@ -81,7 +82,7 @@
                                                 <a asp-page="./Details" asp-route-id="@mealPlan.recipe.recipeId" class="btn btn-sm btn-info">View</a>
                                                 <form method="post" asp-page-handler="RemoveMeal" asp-route-mealPlanId="@mealPlan.mealPlanId"
                                                       asp-route-weekStart="@Model.currentWeekStart.ToString("yyyy-MM-dd")" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                                 </form>
                                             </div>
                                         </div>

@@ -25,6 +25,8 @@ namespace FitTrackPro.Pages.Recipes
         public decimal completionPercentage { get; set; }
         public int totalItems { get; set; }
         public int checkedItems { get; set; }
+        public DateTime? dateRangeStart { get; set; }
+        public DateTime? dateRangeEnd { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -33,22 +35,31 @@ namespace FitTrackPro.Pages.Recipes
 
             totalItems = groupedItems.Values.SelectMany(list => list).Count();
             checkedItems = groupedItems.Values.SelectMany(list => list).Count(item => item.isChecked);
+
+            // Get date range from first item if available
+            var firstItem = groupedItems.Values.SelectMany(list => list).FirstOrDefault();
+            if (firstItem != null)
+            {
+                dateRangeStart = firstItem.rangeStartDate;
+                dateRangeEnd = firstItem.rangeEndDate;
+            }
         }
 
-        public async Task<IActionResult> OnPostGenerateAsync(DateTime? weekStart)
+        public async Task<IActionResult> OnPostGenerateAsync(DateTime? startDate, DateTime? endDate)
         {
-            var startDate = weekStart ?? DateTime.Today;
+            var start = startDate ?? DateTime.Today;
+            var end = endDate ?? DateTime.Today.AddDays(6);
 
-            var items = await shoppingListService.generateShoppingListAsync(startDate);
+            var items = await shoppingListService.generateShoppingListAsync(start, end);
 
             if (items.Any())
             {
                 await shoppingListService.saveShoppingListAsync(items);
-                TempData["SuccessMessage"] = $"Shopping list generated with {items.Count} items!";
+                TempData["SuccessMessage"] = $"Shopping list generated with {items.Count} items from {start:MMM dd} to {end:MMM dd}!";
             }
             else
             {
-                TempData["ErrorMessage"] = "No meal plans found for the selected week. Please add meals to your planner first.";
+                TempData["ErrorMessage"] = "No meal plans found for the selected date range. Please add meals to your planner first.";
             }
 
             return RedirectToPage();

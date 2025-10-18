@@ -34,6 +34,11 @@ namespace FitTrackPro.Models
 
         public DateTime? checkedDate { get; set; }
 
+        // Date range for which this shopping list was generated
+        public DateTime? rangeStartDate { get; set; }
+
+        public DateTime? rangeEndDate { get; set; }
+
         // Calculated property for display
         [NotMapped]
         public string displayText => $"{totalQuantity} {unit} {ingredientName}";

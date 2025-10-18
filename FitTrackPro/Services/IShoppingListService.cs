@@ -10,8 +10,8 @@ namespace FitTrackPro.Services
     // Interface for Shopping List service operations (Assignment requirement: Interfaces)
     public interface IShoppingListService
     {
-        // Generate shopping list from meal plans for a specific week
-        Task<List<ShoppingListItem>> generateShoppingListAsync(DateTime startDate);
+        // Generate shopping list from meal plans for a specific date range
+        Task<List<ShoppingListItem>> generateShoppingListAsync(DateTime startDate, DateTime endDate);
 
         // Save generated shopping list items to database
         Task<bool> saveShoppingListAsync(List<ShoppingListItem> items);

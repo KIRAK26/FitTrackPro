@@ -347,5 +347,44 @@ namespace FitTrackPro.Services
 
             return true;
         }
+
+        // Toggle meal completion status
+        public async Task<bool> toggleMealCompletedAsync(int mealPlanId)
+        {
+            var plan = await context.mealPlans.FindAsync(mealPlanId);
+            if (plan == null)
+                return false;
+
+            plan.isCompleted = !plan.isCompleted;
+            context.mealPlans.Update(plan);
+            await context.SaveChangesAsync();
+
+            // Trigger event
+            string status = plan.isCompleted ? "completed" : "uncompleted";
+            triggerMealPlanUpdatedEvent($"Marked meal as {status} for {plan.date:MMM dd} - {plan.mealType}", plan.date);
+
+            return true;
+        }
+
+        // Delete a template
+        public async Task<bool> deleteTemplateAsync(int templateId)
+        {
+            var template = await context.mealPlanTemplates
+                .Include(t => t.templateItems)
+                .FirstOrDefaultAsync(t => t.templateId == templateId);
+
+            if (template == null)
+                return false;
+
+            // Remove template items first (cascade delete should handle this, but being explicit)
+            context.mealPlanTemplateItems.RemoveRange(template.templateItems);
+
+            // Remove template
+            context.mealPlanTemplates.Remove(template);
+
+            await context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

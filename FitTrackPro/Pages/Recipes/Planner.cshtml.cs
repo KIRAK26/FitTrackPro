@@ -64,13 +64,16 @@ namespace FitTrackPro.Pages.Recipes
             weeklyNutrition = await mealPlanService.calculateWeeklyNutritionAsync(currentWeekStart);
         }
 
-        public async Task<IActionResult> OnPostAssignRecipeAsync()
+        public async Task<IActionResult> OnPostAssignRecipeAsync(DateTime? weekStart)
         {
             var mealType = (MealType)selectedMealType;
             await mealPlanService.assignRecipeToSlotAsync(selectedDate, mealType, selectedRecipeId);
 
             TempData["SuccessMessage"] = "Recipe assigned successfully!";
-            return RedirectToPage(new { weekStart = selectedDate });
+
+            // Calculate the Monday of the week containing selectedDate
+            var currentWeek = selectedDate.AddDays(-(int)selectedDate.DayOfWeek + (int)DayOfWeek.Monday);
+            return RedirectToPage(new { weekStart = currentWeek });
         }
 
         public async Task<IActionResult> OnPostCopyDayAsync()
@@ -136,6 +139,13 @@ namespace FitTrackPro.Pages.Recipes
             await mealPlanService.removeMealPlanAsync(mealPlanId);
 
             TempData["SuccessMessage"] = "Meal removed from plan!";
+            return RedirectToPage(new { weekStart });
+        }
+
+        public async Task<IActionResult> OnPostToggleCompletedAsync(int mealPlanId, DateTime weekStart)
+        {
+            await mealPlanService.toggleMealCompletedAsync(mealPlanId);
+
             return RedirectToPage(new { weekStart });
         }
 

@@ -8,6 +8,10 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h1>Shopping List Generator</h1>
+            @if (Model.dateRangeStart.HasValue && Model.dateRangeEnd.HasValue)
+            {
+                <p class="text-muted">Shopping list from @Model.dateRangeStart.Value.ToString("MMM dd, yyyy") - @Model.dateRangeEnd.Value.ToString("MMM dd, yyyy")</p>
+            }
 
             @if (TempData["SuccessMessage"] != null)
             {
@@ -139,10 +143,16 @@
                 <div class="modal-body">
                     <p>Generate a shopping list from your meal plan.</p>
                     <div class="mb-3">
-                        <label class="form-label">Week Starting:</label>
-                        <input type="date" name="weekStart" class="form-control"
-                               value="@DateTime.Today.ToString("yyyy-MM-dd")" />
-                        <small class="form-text text-muted">Select the Monday of the week you want to shop for.</small>
+                        <label class="form-label">Start Date:</label>
+                        <input type="date" name="startDate" class="form-control"
+                               value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                        <small class="form-text text-muted">Select the first day of your date range.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Date:</label>
+                        <input type="date" name="endDate" class="form-control"
+                               value="@DateTime.Today.AddDays(6).ToString("yyyy-MM-dd")" required />
+                        <small class="form-text text-muted">Select the last day of your date range.</small>
                     </div>
                     <div class="alert alert-warning">
                         <small>Note: This will replace your current shopping list.</small>

@@ -45,5 +45,11 @@ namespace FitTrackPro.Services
 
         // Remove a meal plan entry
         Task<bool> removeMealPlanAsync(int mealPlanId);
+
+        // Toggle meal completion status
+        Task<bool> toggleMealCompletedAsync(int mealPlanId);
+
+        // Delete a template
+        Task<bool> deleteTemplateAsync(int templateId);
     }
 }

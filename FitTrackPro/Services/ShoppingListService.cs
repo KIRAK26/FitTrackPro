@@ -19,17 +19,17 @@ namespace FitTrackPro.Services
             this.context = context;
         }
 
-        // Generate shopping list from meal plans for a specific week (LINQ: SelectMany, GroupBy)
-        public async Task<List<ShoppingListItem>> generateShoppingListAsync(DateTime startDate)
+        // Generate shopping list from meal plans for a specific date range (LINQ: SelectMany, GroupBy)
+        public async Task<List<ShoppingListItem>> generateShoppingListAsync(DateTime startDate, DateTime endDate)
         {
-            DateTime weekStart = startDate.Date.AddDays(-(int)startDate.DayOfWeek + (int)DayOfWeek.Monday);
-            DateTime weekEnd = weekStart.AddDays(7);
+            DateTime rangeStart = startDate.Date;
+            DateTime rangeEnd = endDate.Date.AddDays(1); // Include end date by adding 1 day
 
-            // Get all meal plans for the week with recipes and ingredients
+            // Get all meal plans for the date range with recipes and ingredients
             var weekPlans = await context.mealPlans
                 .Include(mp => mp.recipe)
                 .ThenInclude(r => r.ingredients)
-                .Where(mp => mp.date >= weekStart && mp.date < weekEnd)
+                .Where(mp => mp.date >= rangeStart && mp.date < rangeEnd)
                 .ToListAsync();
 
             if (!weekPlans.Any())
@@ -50,7 +50,9 @@ namespace FitTrackPro.Services
                     category = g.Key.category,
                     totalQuantity = aggregateQuantities(g.Select(i => i.quantity).ToList()),
                     isChecked = false,
-                    generatedDate = DateTime.UtcNow
+                    generatedDate = DateTime.UtcNow,
+                    rangeStartDate = rangeStart,
+                    rangeEndDate = rangeEnd.AddDays(-1) // Subtract 1 to get the actual end date (not the exclusive upper bound)
                 })
                 .OrderBy(item => item.category)
                 .ThenBy(item => item.ingredientName)
