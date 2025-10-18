@@ -19,5 +19,9 @@ namespace FitTrackPro.Models
 
         public string Instructions { get; set; }  // Instructions
 
+        public decimal? CaloriesBurnedPerRep { get; set; }
+
+        public decimal? CaloriesBurnedPerMinute { get; set; }
+
     }
 }

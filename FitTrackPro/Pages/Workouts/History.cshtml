@@ -20,6 +20,14 @@
                         <span class="badge bg-primary fs-6" style="min-width: 150px;">
                             Total Volume: @Model.SessionTotalVolumes[session.Id].ToString("N0") kg
                         </span>
+                @if (session.TotalCaloriesBurned.HasValue && session.TotalCaloriesBurned > 0)
+                {
+                                            <span class="badge bg-danger fs-6" style="min-width: 150px;">
+                                                Calories: @session.TotalCaloriesBurned.Value.ToString("N0") kcal
+                                            </span>
+                }
+                                    </div>
+
                     </div>
 
                     <div class="card-body">
@@ -55,7 +63,7 @@
                                 <p class="text-muted">No details were logged for this session.</p>
                 }
                     </div>
-                </div>
+                
     }
 }
 else

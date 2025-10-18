@@ -16,6 +16,8 @@ namespace FitTrackPro.Models
         // Optional: Link back to the routine that was performed
         public int? WorkoutRoutineId { get; set; }
 
+        public decimal? TotalCaloriesBurned { get; set; }
+
         // Navigation property for all the detailed logs in this session
         public ICollection<SessionLog> SessionLogs { get; set; }
     }

@@ -66,7 +66,36 @@ namespace FitTrackPro.Pages.Workouts
                 return Page();
             }
 
-          
+            CurrentRoutine = await _workoutService.GetRoutineByIdAsync(RoutineId);
+            decimal totalCalories = 0;
+            var validLogs = new List<SessionLog>();
+
+            foreach (var log in Logs)
+            {
+                
+                if (log.Weight.HasValue || log.Reps.HasValue)
+                {
+                    validLogs.Add(log);
+
+                    
+                    var exercise = CurrentRoutine.RoutineExercises
+                        .Select(re => re.Exercise)
+                        .FirstOrDefault(ex => ex.Id == log.ExerciseId);
+
+                    if (exercise != null && log.Reps.HasValue)
+                    {
+                        
+                        if (exercise.CaloriesBurnedPerRep.HasValue)
+                        {
+                            
+                            totalCalories += (log.Reps.Value * exercise.CaloriesBurnedPerRep.Value);
+                        }
+
+                        
+                    }
+                    
+                }
+            }
 
 
             var session = new WorkoutSession
@@ -74,7 +103,8 @@ namespace FitTrackPro.Pages.Workouts
                 WorkoutRoutineId = RoutineId,
                 StartTime = Logs.Any() ? DateTime.UtcNow : DateTime.UtcNow, // For simplicity, we set EndTime to now
                 // Filter out logs where the user didn't input any data                                                            
-                SessionLogs = Logs.Where(log => log.Weight.HasValue || log.Reps.HasValue).ToList()
+                SessionLogs = Logs.Where(log => log.Weight.HasValue || log.Reps.HasValue).ToList(),
+                TotalCaloriesBurned = totalCalories
             };
 
             // Only save the session if there is at least one valid log entry
