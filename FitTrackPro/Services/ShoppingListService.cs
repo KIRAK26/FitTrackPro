@@ -23,7 +23,7 @@ namespace FitTrackPro.Services
         public async Task<List<ShoppingListItem>> generateShoppingListAsync(DateTime startDate, DateTime endDate)
         {
             DateTime rangeStart = startDate.Date;
-            DateTime rangeEnd = endDate.Date.AddDays(1); // Include end date by adding 1 day
+            DateTime rangeEnd = endDate.Date.AddDays(1); // Exclusive upper bound for date range query
 
             // Get all meal plans for the date range with recipes and ingredients
             var weekPlans = await context.mealPlans
@@ -52,7 +52,7 @@ namespace FitTrackPro.Services
                     isChecked = false,
                     generatedDate = DateTime.UtcNow,
                     rangeStartDate = rangeStart,
-                    rangeEndDate = rangeEnd.AddDays(-1) // Subtract 1 to get the actual end date (not the exclusive upper bound)
+                    rangeEndDate = endDate
                 })
                 .OrderBy(item => item.category)
                 .ThenBy(item => item.ingredientName)
