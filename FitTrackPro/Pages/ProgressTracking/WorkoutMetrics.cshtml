@@ -1,0 +1,157 @@
+@page
+@model FitTrackPro.Pages.ProgressTracking.WorkoutMetricsModel
+@{
+    ViewData["Title"] = "Workout Metrics";
+    var selectedRange = string.IsNullOrEmpty(Model.TimeRange) ? "All Time" : Model.TimeRange switch
+    {
+        "recent" => "Most Recent",
+        "weekly" => "Weekly",
+        "monthly" => "Monthly",
+        _ => "All Time"
+    };
+}
+
+<div class="container ">
+    @* default bootstrap card template *@
+    <div class="card mb-2">
+        <div class="card-body">
+
+             @* Main subheading / date and stamp *@
+            <h2 class="card-title">Workout Metrics</h2>
+            <p class="card-text">Track your workout progress including total weight lifted, workouts completed, and personal records for each exercise.</p>
+
+            @if (Model.TotalWorkoutsCompleted == 0)
+            {
+                <div class="alert alert-info">
+                    <h5>No workouts yet</h5>
+                    <p>Start tracking your progress by completing your first workout session.</p>
+                    <a href="/Workouts" class="btn btn-primary">Go to Workouts</a>
+                </div>
+            }
+            else
+            {
+                @* Button and dropdown button component *@
+                <div class="d-flex justify-content-between mb-4">
+                    <a href="/Workouts" class="btn btn-primary">Go to Workouts</a>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @selectedRange
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="?timeRange=recent">Most Recent</a></li>
+                            <li><a class="dropdown-item" href="?timeRange=weekly">Weekly</a></li>
+                            <li><a class="dropdown-item" href="?timeRange=monthly">Monthly</a></li>
+                            <li><a class="dropdown-item" href="?">All Time</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                @* Overall Stats Section *@
+                <h4 class="mb-3">Overall Stats</h4>
+                <div class="row g-3 mb-5">
+
+                    @* Total weight lifted *@
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-muted">Total Weight Lifted</h5>
+                                <h2 class="mb-0">@Model.TotalWeightLifted.ToString("F0") <small class="text-muted">kg</small></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Total workouts Completed *@
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-muted">Total Workouts</h5>
+                                <h2 class="mb-0">@Model.TotalWorkoutsCompleted</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* resting time *@
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-muted">Avg Time Per Set</h5>
+                                <h2 class="mb-0">@Model.AverageRestingTime.ToString("F1") <small class="text-muted">min</small></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @* Exercise PRs Section *@
+                <h4 class="mb-3">Exercise Personal Records</h4>
+
+                @if (Model.ExercisePRs.Any())
+                {
+                    <div class="mb-4">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @if (Model.SelectedExerciseId.HasValue && Model.SelectedExercisePR != null)
+                                {
+                                    @Model.SelectedExercisePR.ExerciseName
+                                }
+                                else
+                                {
+                                    <text>Select an Exercise</text>
+                                }
+                            </button>
+                            <ul class="dropdown-menu">
+                                @foreach (var exercise in Model.AllExercises.Where(e => Model.ExercisePRs.Any(pr => pr.ExerciseId == e.Id)))
+                                {
+                                    <li><a class="dropdown-item" href="?timeRange=@(Model.TimeRange ?? "")&selectedExerciseId=@exercise.Id">@exercise.Name</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    @if (Model.SelectedExercisePR != null)
+                    {
+                        <div class="row g-3">
+                            @* Max weight PR *@
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-muted">Personal Record (Max Weight)</h5>
+                                        <h3 class="mb-0">@Model.SelectedExercisePR.ExerciseName</h3>
+                                        <h2 class="mt-2">@Model.SelectedExercisePR.MaxWeight.ToString("F1") <small class="text-muted">kg</small> <small>for</small> @Model.SelectedExercisePR.MaxWeightReps <small class="text-muted">reps</small></h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @* Volume PR *@
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-muted">Volume PR (Max Weight × Reps)</h5>
+                                        <h3 class="mb-0">@Model.SelectedExercisePR.ExerciseName</h3>
+                                        <h2 class="mt-2">@Model.SelectedExercisePR.MaxVolume.ToString("F0") <small class="text-muted">kg</small></h2>
+                                        <p class="text-muted mb-0">(@Model.SelectedExercisePR.MaxVolumeWeight.ToString("F1") kg × @Model.SelectedExercisePR.MaxVolumeReps reps)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary">
+                            <p class="mb-0">Select an exercise from the dropdown above to view your personal records.</p>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <p class="mb-0">No exercise data available for the selected time range.</p>
+                    </div>
+                }
+            }
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <a href="/ProgressTracking" class="btn btn-danger">Go Back</a>
+            </div>
+        </div>
+    </div>
+</div>

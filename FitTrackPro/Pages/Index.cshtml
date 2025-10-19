@@ -36,9 +36,9 @@
         </a>
     </div>
     <div class="quick-action-card">
-        <a asp-page="/Workouts/History" class="quick-action-link">
+        <a asp-page="/ProgressTracking/Index" class="quick-action-link">
             <div class="quick-action-icon progress-icon">📈</div>
-            <h3>View History</h3>
+            <h3>View Progress</h3>
             <p>Check your stats</p>
         </a>
     </div>
@@ -86,18 +86,6 @@
                 @if (Model.latestWeight.HasValue)
                 {
                     <p class="summary-value">@Model.latestWeight.Value kg</p>
-                    @if (Model.weightTrend == "down")
-                    {
-                        <span class="summary-detail trend-down">↓ Trending down</span>
-                    }
-                    else if (Model.weightTrend == "up")
-                    {
-                        <span class="summary-detail trend-up">↑ Trending up</span>
-                    }
-                    else
-                    {
-                        <span class="summary-detail trend-stable">→ Stable</span>
-                    }
                 }
                 else
                 {
@@ -164,6 +152,14 @@
                 <h3>History</h3>
                 <p>View your past workout sessions</p>
                 <div class="feature-badge">View history</div>
+            </a>
+        </div>
+        <div class="feature-card">
+            <a asp-page="/ProgressTracking/Index" class="feature-link">
+                <div class="feature-icon">📈</div>
+                <h3>Progress</h3>
+                <p>Check your workout progress and manage your body metrics</p>
+                <div class="feature-badge">View Progress</div>
             </a>
         </div>
     </div>

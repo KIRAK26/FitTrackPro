@@ -31,6 +31,7 @@ namespace FitTrackPro.Data
         public DbSet<MealPlanTemplateItem> mealPlanTemplateItems { get; set; }
         public DbSet<ShoppingListItem> shoppingListItems { get; set; }
 
+        // Progress feature
         public DbSet<BodyMeasurement> BodyMeasurements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

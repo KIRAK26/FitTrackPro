@@ -28,29 +28,19 @@ builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
 var app = builder.Build();
 
 
-// Seed the database (Combined)
+// Seed the database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var logger = services.GetRequiredService<ILogger<Program>>(); // Get logger for error handling
+    var logger = services.GetRequiredService<ILogger<Program>>();
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-
-        // Ensure database is created (from main)
-        context.Database.EnsureCreated();
-
-        // Run your (HEAD) seeder
-        DataSeeder.Initialize(context);
-
-        // Run your teammate's (main) seeder
-        await RecipeDataSeeder.seedRecipesAsync(context);
-
-        logger.LogInformation("Database seeding completed successfully!"); // Use logger
+        await DataSeeder.InitializeAsync(context);
+        logger.LogInformation("Database seeding completed successfully!");
     }
     catch (Exception ex)
     {
-        // Log errors from either seeder
         logger.LogError(ex, "An error occurred while seeding the database.");
     }
 }

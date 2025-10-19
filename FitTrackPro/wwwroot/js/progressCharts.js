@@ -165,12 +165,73 @@ function createChart(canvasId, data, options) {
     });
 }
 
-// Initialize charts when the page loads
+function initializeDailyCaloriesChart(dailyCaloriesData) {
+    if (dailyCaloriesData.length === 0) {
+        return;
+    }
+    const labels = dailyCaloriesData.map(d => d.date);
+    const caloriesData = dailyCaloriesData.map(d => d.calories);
+
+    const canvas = document.getElementById('dailyCaloriesChart');
+    if (!canvas) return;
+
+    if (charts['dailyCaloriesChart']) {
+        charts['dailyCaloriesChart'].destroy();
+    }
+
+    const ctx = canvas.getContext('2d');
+    charts['dailyCaloriesChart'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Calories',
+                data: caloriesData,
+                backgroundColor: 'rgba(18, 207, 198, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(18, 207, 198, 0.8)',
+                hoverBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Calories'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                }
+            }
+        }
+    });
+}
+
+// load charts when the page loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Get the data from the page (will be injected by Razor)
+    // get  data from the page (will be injected by Razor)
     const metricsDataElement = document.getElementById('metricsData');
     if (metricsDataElement) {
         const metricsData = JSON.parse(metricsDataElement.textContent);
         initializeCharts(metricsData);
+    }
+    const dailyCaloriesDataElement = document.getElementById('dailyCaloriesData');
+    if (dailyCaloriesDataElement) {
+        const dailyCaloriesData = JSON.parse(dailyCaloriesDataElement.textContent);
+        initializeDailyCaloriesChart(dailyCaloriesData);
     }
 });
