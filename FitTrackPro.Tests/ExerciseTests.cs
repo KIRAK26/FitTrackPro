@@ -37,12 +37,13 @@ namespace FitTrackPro.Tests
         // --------------------------------
 
         [Test]
-        public void DataSeeder_Initialize_AddsExercisesToDatabase()
+        public async Task DataSeeder_Initialize_AddsExercisesToDatabase()
         {
             // Arrange: The database is empty.
 
+
             // Act: Run the DataSeeder
-            DataSeeder.Initialize(_context);
+            await DataSeeder.InitializeAsync(_context);
 
             // Assert: Check if the exercises were actually added.
             // We use a new context instance for assertion to ensure data was persisted.
