@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FitTrackPro.Models;
 
+
 namespace FitTrackPro.Data
 {
     public class ApplicationDbContext : DbContext
@@ -29,6 +30,9 @@ namespace FitTrackPro.Data
         public DbSet<MealPlanTemplate> mealPlanTemplates { get; set; }
         public DbSet<MealPlanTemplateItem> mealPlanTemplateItems { get; set; }
         public DbSet<ShoppingListItem> shoppingListItems { get; set; }
+
+        // Progress feature
+        public DbSet<BodyMeasurement> BodyMeasurements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -131,5 +135,6 @@ namespace FitTrackPro.Data
                 entity.HasIndex(s => s.category);
             });
         }
+        
     }
 }

@@ -61,11 +61,13 @@ namespace FitTrackPro.Pages
                 .OrderByDescending(s => s.StartTime)
                 .FirstOrDefaultAsync();
 
-            if (recentSession != null)
+            var recentBodyMeasure = await _context.BodyMeasurements
+                .OrderByDescending(m => m.Date)
+                .FirstOrDefaultAsync();
+
+            if (recentBodyMeasure != null)
             {
-                // Simulated weight display (in real app, use actual weight tracking)
-                latestWeight = 75.5m; // Placeholder
-                weightTrend = "down"; // Could be "up", "down", or "stable"
+                latestWeight = (decimal)recentBodyMeasure.Weight; 
             }
 
             // Get summary counts

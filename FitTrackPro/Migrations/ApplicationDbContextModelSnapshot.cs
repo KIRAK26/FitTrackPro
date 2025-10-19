@@ -17,6 +17,41 @@ namespace FitTrackPro.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
 
+            modelBuilder.Entity("FitTrackPro.Models.BodyMeasurement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float?>("Arms")
+                        .HasColumnType("REAL");
+
+                    b.Property<float?>("BodyFat")
+                        .HasColumnType("REAL");
+
+                    b.Property<float?>("Chest")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float?>("Legs")
+                        .HasColumnType("REAL");
+
+                    b.Property<float?>("MuscleMass")
+                        .HasColumnType("REAL");
+
+                    b.Property<float?>("Waist")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("Weight")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BodyMeasurements");
+                });
+
             modelBuilder.Entity("FitTrackPro.Models.Exercise", b =>
             {
                 b.Property<int>("Id")

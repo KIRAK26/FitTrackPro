@@ -1,0 +1,81 @@
+@page
+@model FitTrackPro.Pages.ProgressTracking.IndexModel
+@{
+    ViewData["Title"] = "Progress Dashboard";
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="application/json" id="dailyCaloriesData">@Html.Raw(Model.DailyCaloriesChartData)</script>
+    <script src="~/js/progressCharts.js"></script>
+}
+
+<div class="container">
+    <div class="card mb-2">
+        <div class="card-body">
+            <h2 class="card-title">Progress Dashboard</h2>
+            <div class="mb-4">
+                <h6 class="text-muted mb-2">Detailed Analytics</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="/ProgressTracking/BodyMetrics" class="btn btn-primary">Body Metrics</a>
+                    <a href="/ProgressTracking/WorkoutMetrics" class="btn btn-primary">Workout Metrics</a>
+                </div>
+            </div>
+
+
+            @* Weekly sumkmary *@
+            <h6 class="card-text">Weekly summary of your progress metrics.</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-muted">Weight</h5>
+                            @if (Model.CurrentWeight.HasValue)
+                            {
+                                <h2 class="mb-0">@Model.CurrentWeight.Value.ToString("F1") <small class="text-muted">kg</small></h2>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">No data</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-muted">Volume Lifted</h5>
+                            <h2 class="mb-0">@Model.TotalVolumeLifted.ToString("F0") <small class="text-muted">kg</small></h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-muted">Calories Consumed</h5>
+                            <h2 class="mb-0">@Model.CaloriesConsumed.ToString("N0")</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-muted">Calories/Day</h5>
+                            <h2 class="mb-0">@Model.AverageCaloriesPerDay.ToString("N0")</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Calories chart *@
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Daily Calories (Last 7 Days)</h5>
+                    <canvas id="dailyCaloriesChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

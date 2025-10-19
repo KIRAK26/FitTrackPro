@@ -50,8 +50,14 @@ dist/
 # macOS system
 *.DS_Store
 
+
 # SQLite temporary files
 *.db
 *.db-wal
 *.db-shm
 *.backup
+
+node_modules/
+bootstrap/
+package.json
+package-lock.json
