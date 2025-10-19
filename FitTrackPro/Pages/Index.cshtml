@@ -1,10 +1,174 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero Section -->
+<div class="dashboard-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Welcome to FitTrackPro</h1>
+        <p class="hero-subtitle">Your complete fitness and nutrition companion</p>
+    </div>
 </div>
+
+<!-- Quick Action Buttons -->
+<div class="quick-actions-container">
+    <div class="quick-action-card">
+        <a asp-page="/Workouts/Index" class="quick-action-link">
+            <div class="quick-action-icon workout-icon">💪</div>
+            <h3>Start Workout</h3>
+            <p>Begin a new session</p>
+        </a>
+    </div>
+    <div class="quick-action-card">
+        <a asp-page="/Recipes/Planner" class="quick-action-link">
+            <div class="quick-action-icon meal-icon">🍽️</div>
+            <h3>Plan Meals</h3>
+            <p>Schedule your nutrition</p>
+        </a>
+    </div>
+    <div class="quick-action-card">
+        <a asp-page="/Workouts/Builder" class="quick-action-link">
+            <div class="quick-action-icon metrics-icon">🏗️</div>
+            <h3>Build Routine</h3>
+            <p>Create workout routine</p>
+        </a>
+    </div>
+    <div class="quick-action-card">
+        <a asp-page="/Workouts/History" class="quick-action-link">
+            <div class="quick-action-icon progress-icon">📈</div>
+            <h3>View History</h3>
+            <p>Check your stats</p>
+        </a>
+    </div>
+</div>
+
+<!-- Today's Summary Section -->
+<div class="todays-summary">
+    <h2 class="section-title">Today's Summary</h2>
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-icon">🏋️</div>
+            <div class="summary-content">
+                <h4>Workout Status</h4>
+                @if (Model.hasCompletedWorkoutToday)
+                {
+                    <p class="summary-value completed">✓ Completed</p>
+                    <span class="summary-detail">Great job today!</span>
+                }
+                else if (Model.todayWorkoutCount > 0)
+                {
+                    <p class="summary-value in-progress">In Progress</p>
+                    <span class="summary-detail">@Model.todayWorkoutCount session(s)</span>
+                }
+                else
+                {
+                    <p class="summary-value pending">Pending</p>
+                    <span class="summary-detail">No workout yet</span>
+                }
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-icon">🍴</div>
+            <div class="summary-content">
+                <h4>Meals Planned</h4>
+                <p class="summary-value">@Model.todayMealsCompleted / @Model.todayMealsPlanned</p>
+                <span class="summary-detail">meals completed</span>
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-icon">⚖️</div>
+            <div class="summary-content">
+                <h4>Current Weight</h4>
+                @if (Model.latestWeight.HasValue)
+                {
+                    <p class="summary-value">@Model.latestWeight.Value kg</p>
+                    @if (Model.weightTrend == "down")
+                    {
+                        <span class="summary-detail trend-down">↓ Trending down</span>
+                    }
+                    else if (Model.weightTrend == "up")
+                    {
+                        <span class="summary-detail trend-up">↑ Trending up</span>
+                    }
+                    else
+                    {
+                        <span class="summary-detail trend-stable">→ Stable</span>
+                    }
+                }
+                else
+                {
+                    <p class="summary-value">--</p>
+                    <span class="summary-detail">No data yet</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feature Cards Section -->
+<div class="features-section">
+    <h2 class="section-title">Explore Features</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <a asp-page="/Workouts/Index" class="feature-link">
+                <div class="feature-icon">💪</div>
+                <h3>Workouts</h3>
+                <p>View and manage your workout routines</p>
+                <div class="feature-badge">@Model.totalWorkoutRoutines routines</div>
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <a asp-page="/Workouts/Create" class="feature-link">
+                <div class="feature-icon">🏃</div>
+                <h3>Exercises</h3>
+                <p>Browse exercise library and create custom ones</p>
+                <div class="feature-badge">@Model.totalExercises exercises</div>
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <a asp-page="/Recipes/Index" class="feature-link">
+                <div class="feature-icon">🥗</div>
+                <h3>Recipes</h3>
+                <p>Discover healthy recipes with nutritional info</p>
+                <div class="feature-badge">@Model.totalRecipes recipes</div>
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <a asp-page="/Recipes/Planner" class="feature-link">
+                <div class="feature-icon">📅</div>
+                <h3>Meal Plans</h3>
+                <p>Plan your meals for the week ahead</p>
+                <div class="feature-badge">@Model.todayMealsPlanned today</div>
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <a asp-page="/Recipes/ShoppingList" class="feature-link">
+                <div class="feature-icon">🛒</div>
+                <h3>Shopping List</h3>
+                <p>Generate lists from your meal plans</p>
+                <div class="feature-badge">@Model.shoppingListItemsCount items</div>
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <a asp-page="/Workouts/History" class="feature-link">
+                <div class="feature-icon">📊</div>
+                <h3>History</h3>
+                <p>View your past workout sessions</p>
+                <div class="feature-badge">View history</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+}

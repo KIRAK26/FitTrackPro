@@ -1,4 +1,124 @@
-﻿@page
+﻿@page "{routineId:int}"
 @model FitTrackPro.Pages.Workouts.SessionModel
 @{
+    ViewData["Title"] = "Active Workout Session";
+}
+
+@if (Model.CurrentRoutine != null)
+{
+        <h1>@Model.CurrentRoutine.Name</h1>
+        <p>@Model.CurrentRoutine.Description</p>
+        <hr />
+
+        <form method="post">
+            <input type="hidden" asp-for="RoutineId" />
+
+        @for (var i = 0; i < Model.Logs.Count; i++)
+        {
+            var routineExercise = Model.CurrentRoutine.RoutineExercises
+                .FirstOrDefault(re => re.ExerciseId == Model.Logs[i].ExerciseId);
+
+            var caloriesPerRep = routineExercise?.Exercise.CaloriesBurnedPerRep ?? 0m;
+
+            if (i == 0 || Model.Logs[i].ExerciseId != Model.Logs[i - 1].ExerciseId)
+            {
+                            <h4 class="mt-4">@routineExercise.Exercise.Name</h4>
+                            <p><strong>Target:</strong> @routineExercise.Sets sets of @routineExercise.Reps reps.</p>
+            }
+
+                    <input type="hidden" asp-for="Logs[i].ExerciseId" />
+                    <input type="hidden" asp-for="Logs[i].SetNumber" />
+
+                    <div class="row align-items-center mb-2">
+                        <div class="col-auto">
+                            <label class="col-form-label">Set @Model.Logs[i].SetNumber</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Logs[i].Weight" class="form-control" placeholder="Weight (kg)" />
+                        </div>
+                        <div class="col">
+                            <input asp-for="Logs[i].Reps" 
+                                   class="form-control log-reps-input" 
+                                   placeholder="Reps" 
+                                   data-cals-per-rep="@caloriesPerRep.ToString("G29")" />
+                        </div>
+                        <div class="col-4">
+                            <input asp-for="Logs[i].Notes" class="form-control" placeholder="Notes (optional)" />
+                        </div>
+                        <div class="col-auto" style="min-width: 100px;">
+                            <span class="text-danger fw-bold set-calorie-display"></span>
+                        </div>
+                    </div>
+        }
+
+            <div class="text-end mt-4">
+                <h3 class="display-6">Total: <span id="total-calories-display" class="fw-bold text-danger">0.0</span> kcal</h3>
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-success mt-2">Finish Workout</button>
+        </form>
+}
+else
+{
+        <p>Could not load the workout routine.</p>
+}
+
+@section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                // Find all the 'Reps' input fields we tagged with our class
+                const repInputs = document.querySelectorAll(".log-reps-input");
+
+                // Find the single element that displays the grand total
+                const totalCaloriesEl = document.getElementById("total-calories-display");
+
+                // This function will run every time a user types in any 'Reps' box
+                function updateAllCalories() {
+                    let totalSessionCalories = 0;
+
+                    // Loop through every 'Reps' input field on the page
+                    repInputs.forEach(input => {
+                        // 1. Get the number of reps (or 0 if empty/invalid)
+                        const reps = parseFloat(input.value) || 0;
+
+                        // 2. Get the 'Calories Per Rep' value we stored in the data- attribute
+                        const calsPerRep = parseFloat(input.dataset.calsPerRep) || 0;
+
+                        // 3. Calculate the total for this specific set
+                        const setCalories = reps * calsPerRep;
+
+                        // 4. Find the display 'span' for this specific row
+                        // We do this by going up to the parent '.row' and finding our '.set-calorie-display' span within it
+                        const setDisplayEl = input.closest(".row").querySelector(".set-calorie-display");
+
+                        if (setDisplayEl) {
+                            if (setCalories > 0) {
+                                // Update the text, e.g., "🔥 35.0 kcal"
+                                setDisplayEl.textContent = `🔥 ${setCalories.toFixed(1)} kcal`;
+                            } else {
+                                // Clear the text if reps are 0 or empty
+                                setDisplayEl.textContent = "";
+                            }
+                        }
+
+                        // 5. Add this set's calories to the grand total
+                        totalSessionCalories += setCalories;
+                    });
+
+                    // 6. Update the grand total display element at the bottom of the page
+                    totalCaloriesEl.textContent = totalSessionCalories.toFixed(1);
+                }
+
+                // Attach the 'input' event listener to every 'Reps' box.
+                // This makes 'updateAllCalories' run instantly on every key press.
+                repInputs.forEach(input => {
+                    input.addEventListener("input", updateAllCalories);
+                });
+
+                // Run the function once right when the page loads
+                // This ensures all fields are initialized (showing 0.0)
+                updateAllCalories();
+            });
+        </script>
 }
