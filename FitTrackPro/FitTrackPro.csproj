@@ -18,4 +18,10 @@
     </PackageReference>
   </ItemGroup>
 
+	<Target Name="ClientSideLibraryRestore" BeforeTargets="Build">
+		<Exec Command="libman restore" />
+	</Target>
+	
+	
+
 </Project>
